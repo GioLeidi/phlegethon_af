@@ -2,10 +2,10 @@ SRC = ../../source
 APPNAME = app
 
 #grid
-OPTS += nx1_make=128
-OPTS += nx2_make=192
-OPTS += ddx1_make=2
-OPTS += ddx2_make=2
+OPTS += nx1_make=64
+OPTS += nx2_make=96
+OPTS += ddx1_make=1
+OPTS += ddx2_make=1
 OPTS += ngc_make=1
 
 #boundary conditions
@@ -25,7 +25,7 @@ OPTS += dt_dump_make=10.0_rp
 OPTS += info_terminal_rate_make=10
 
 #stopping criteria
-OPTS += tmax_make=300.00_rp
+OPTS += tmax_make=30.00_rp
 
 #--------------------------------#
 

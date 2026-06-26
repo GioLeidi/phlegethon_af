@@ -172,7 +172,8 @@ module source
  !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
  real(kind=rp), parameter :: &
- CONST_PI = 3.141592653589793238_rp
+ CONST_PI = 3.141592653589793238_rp, &
+ CONST_RGAS = 8.31446261815324e7_rp
 
  !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
  ! MPI UTILS
@@ -791,20 +792,17 @@ contains
 
 #ifdef USE_GRAVITY      
       !Point values of density and momentum at cell center 
-      rho_cc = (1.0_rp/16.0_rp)*(36.0_rp*lgrid%qbar_cc(i_rho,i,j) - 4.0_rp*(lgrid%q_x1(i_rho,i,j)+ lgrid%q_x1(i_rho,i+1,j)+ lgrid%q_x2(i_rho,i,j)+ lgrid%q_x2(i_rho,i,j+1)) - (lgrid%q_cor(i_rho,i,j)+ lgrid%q_cor(i_rho,i+1,j)+ lgrid%q_cor(i_rho,i,j+1)+ lgrid%q_cor(i_rho,i+1,j+1)) )
+      rho_cc = (1.0_rp/16.0_rp)*(36.0_rp*lgrid%qbar_cc(i_rho,i,j) - 4.0_rp*(lgrid%q_x1(i_rho,i,j) + lgrid%q_x1(i_rho,i+1,j) &
+      + lgrid%q_x2(i_rho,i,j) + lgrid%q_x2(i_rho,i,j+1)) - (lgrid%q_cor(i_rho,i,j)+ lgrid%q_cor(i_rho,i+1,j) + &
+      lgrid%q_cor(i_rho,i,j+1) + lgrid%q_cor(i_rho,i+1,j+1)) )
 
-      rhovx1_cc = (1.0_rp/16.0_rp)*(36.0_rp*lgrid%qbar_cc(i_rhovx1,i,j) - 4.0_rp*(lgrid%q_x1(i_rhovx1,i,j)+ lgrid%q_x1(i_rhovx1,i+1,j)+ lgrid%q_x2(i_rhovx1,i,j)+ lgrid%q_x2(i_rhovx1,i,j+1)) - (lgrid%q_cor(i_rhovx1,i,j)+ lgrid%q_cor(i_rhovx1,i+1,j)+ lgrid%q_cor(i_rhovx1,i,j+1)+ lgrid%q_cor(i_rhovx1,i+1,j+1)) )
+      rhovx1_cc = (1.0_rp/16.0_rp)*(36.0_rp*lgrid%qbar_cc(i_rhovx1,i,j) - 4.0_rp*(lgrid%q_x1(i_rhovx1,i,j) + &
+      lgrid%q_x1(i_rhovx1,i+1,j) + lgrid%q_x2(i_rhovx1,i,j) + lgrid%q_x2(i_rhovx1,i,j+1)) - (lgrid%q_cor(i_rhovx1,i,j) + &
+      lgrid%q_cor(i_rhovx1,i+1,j) + lgrid%q_cor(i_rhovx1,i,j+1) + lgrid%q_cor(i_rhovx1,i+1,j+1)) )
       
-      rhovx2_cc = (1.0_rp/16.0_rp)*(36.0_rp*lgrid%qbar_cc(i_rhovx2,i,j) - 4.0_rp*(lgrid%q_x1(i_rhovx2,i,j)+ lgrid%q_x1(i_rhovx2,i+1,j)+ lgrid%q_x2(i_rhovx2,i,j)+ lgrid%q_x2(i_rhovx2,i,j+1)) - (lgrid%q_cor(i_rhovx2,i,j)+ lgrid%q_cor(i_rhovx2,i+1,j)+ lgrid%q_cor(i_rhovx2,i,j+1)+ lgrid%q_cor(i_rhovx2,i+1,j+1)) )
-
-       !SECOND-ORDER DISCRETIZATION OF GRAVITY SOURCE
-      !  lgrid%res_cc(i_rhovx1,i,j) = lgrid%res_cc(i_rhovx1,i,j) - &
-      !                               lgrid%qbar_cc(i_rho,i,j) * lgrid%grav_cc(1,i,j) 
-      !  lgrid%res_cc(i_rhovx2,i,j) = lgrid%res_cc(i_rhovx2,i,j) - &
-      !                               lgrid%qbar_cc(i_rho,i,j) * lgrid%grav_cc(2,i,j)
-      !  lgrid%res_cc(i_rhoe,i,j)   = lgrid%res_cc(i_rhoe,i,j) - &
-      !                               lgrid%qbar_cc(i_rhovx1,i,j) * lgrid%grav_cc(1,i,j) - &
-      !                               lgrid%qbar_cc(i_rhovx2,i,j) * lgrid%grav_cc(2,i,j)
+      rhovx2_cc = (1.0_rp/16.0_rp)*(36.0_rp*lgrid%qbar_cc(i_rhovx2,i,j) - 4.0_rp*(lgrid%q_x1(i_rhovx2,i,j) & 
+      + lgrid%q_x1(i_rhovx2,i+1,j) + lgrid%q_x2(i_rhovx2,i,j) + lgrid%q_x2(i_rhovx2,i,j+1)) - & 
+      (lgrid%q_cor(i_rhovx2,i,j) + lgrid%q_cor(i_rhovx2,i+1,j) + lgrid%q_cor(i_rhovx2,i,j+1) + lgrid%q_cor(i_rhovx2,i+1,j+1)) )
 
       ! THIRD-ORDER DISCRETIZATION OF GRAVITY SOURCE
        lgrid%res_cc(i_rhovx1,i,j) = lgrid%res_cc(i_rhovx1,i,j) - &

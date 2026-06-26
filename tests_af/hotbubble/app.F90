@@ -11,8 +11,7 @@ program test
  real(kind=rp) :: p0,temp0,grav0,x0,y0,z0,inv_gamma, &
  A0,ky,intc,intf,p,grav,A,r,r0,rho,rho0,T
         
- real(kind=rp), parameter :: dAbyA = 0.001_rp
- real(kind=rp), parameter :: CONST_RGAS = 8.31446261815324e7_rp
+ real(kind=rp), parameter :: dAbyA = 0.1_rp
 
  x1l = 0.0_rp
  x1u = 1e6_rp
@@ -30,7 +29,6 @@ program test
  x0 = 5e5_rp
  y0 = 1.875e5_rp
  z0 = 5e5_rp
-             
  
  rho0 = p0/(CONST_RGAS*temp0) 
  inv_gamma = 1.0_rp/lgrid%gm
@@ -45,8 +43,8 @@ program test
  !---------------------------------------------------------------------------------------------------------------------------------
 
   ! 1. Cell Centers
-  do j=lbound(lgrid%qbar_cc,3),ubound(lgrid%qbar_cc,3)
-   do i=lbound(lgrid%qbar_cc,2),ubound(lgrid%qbar_cc,2)
+  do j=lbound(lgrid%q_cc,3),ubound(lgrid%q_cc,3)
+   do i=lbound(lgrid%q_cc,2),ubound(lgrid%q_cc,2)
      x = lgrid%coords_cc(1,i,j)
      y = lgrid%coords_cc(2,i,j)
 
@@ -66,10 +64,10 @@ program test
      rho = (p/A)**inv_gamma
 
      ! Conserved variables
-     lgrid%qbar_cc(i_rho,i,j)    = rho
-     lgrid%qbar_cc(i_rhovx1,i,j) = 0.0_rp
-     lgrid%qbar_cc(i_rhovx2,i,j) = 0.0_rp
-     lgrid%qbar_cc(i_rhoe,i,j)   = p/(lgrid%gm-1.0_rp)
+     lgrid%q_cc(i_rho,i,j)    = rho
+     lgrid%q_cc(i_rhovx1,i,j) = 0.0_rp
+     lgrid%q_cc(i_rhovx2,i,j) = 0.0_rp
+     lgrid%q_cc(i_rhoe,i,j)   = p/(lgrid%gm-1.0_rp)
 
      lgrid%grav_cc(1,i,j) = 0.0_rp
      lgrid%grav_cc(2,i,j) = grav
